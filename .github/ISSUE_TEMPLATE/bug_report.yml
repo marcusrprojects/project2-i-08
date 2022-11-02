@@ -1,0 +1,39 @@
+name: Bug Report
+description: Create a bug report to help us fix issues with the CoffeeMaker.
+labels: [ "bug" ]
+body:
+    -   type: textarea
+        attributes:
+            label: Describe the Bug
+            description: A clear and concise description of what the bug is
+        validations:
+            required: true
+    -   type: textarea
+        attributes:
+            label: Reproduction Steps
+            description: Tell us about the steps to reproduce the bug
+            value: |
+                1.
+                2.
+                3.
+                ...
+        validations:
+            required: true
+    - type: textarea
+      attributes:
+          label: Expected Result
+          description: A clear and concise description of what you expected to happen
+      validations:
+          required: true
+    -   type: textarea
+        attributes:
+            label: Isolation
+            description: Tell us any actions taken that isolate the bug from other features
+        validations:
+            required: true
+    -   type: textarea
+        attributes:
+            label: Additional Context
+            description: Add any extra context about the bug here
+        validations:
+            required: false
