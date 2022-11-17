@@ -147,8 +147,6 @@ input.ng-dirty.ng-invalid-min {
 			</form>
 
 			<div class="formcontainer">
-				
-					
 					
 					<div class="row">
 						<label class="col-md-12 control-lable" for="file">Ingredients</label>
@@ -159,8 +157,27 @@ input.ng-dirty.ng-invalid-min {
 							<label class="col-md-12 control-lable" for="file">
 								<li class="list-group-item" id="ingredient-list-element" data-ng-repeat="ingredient in ingredients">
 									<div class="form-group col-md-12">
-									<span id="GFG_Span"> 
-						            Ingredient
+									<span> 
+						            <form ng-submit="submit()" name="editRecipeForm"
+					class="form-horizontal">
+				<div class="row">
+					<div class="form-group col-md-12">
+												<label class="col-md-12 control-lable" for="file">
+					
+				  <label for="recipes">Choose an ingredient:</label>
+				  <select class="form-control" id="recipes" name="recipes">
+				    <option value="Coffee">Coffee</option>
+				    <option value="Milk">Milk</option>
+				    <option value="Sugar" selected>Sugar</option>
+				    <option value="Chocolate">Chocolate</option>
+				    <option value="Salt" selected>Salt</option>
+				    <option value="Flour">Flour</option>
+				    
+				  </select>
+				  </label>
+				  </div>
+				  </div>
+			</form>
 						        </span></div>
 									<div class="col-md-7">
 										<input class="form-control" type="number" ng-model="ingredient[ingredient.type].amount" name="{{ingredient.type}}"
@@ -183,7 +200,7 @@ input.ng-dirty.ng-invalid-min {
 
 					<div class="row">
 						<div class="form-actions floatRight">
-							<input type="submit" value="Edit Units"
+							<input type="submit" value="Edit Units" 
 								class="btn btn-primary btn-sm"
 								ng-disabled="editRecipeForm.$invalid" />
 							<button type="button" ng-click="reset()"
