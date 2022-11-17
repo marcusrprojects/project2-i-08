@@ -31,10 +31,12 @@ input.ng-dirty.ng-invalid-min {
 		var app = angular.module('myApp', []);
 		app.controller('inventoryCtrl', function($scope, $http) {
 			$scope.inventoryOriginal = {
-				vanilla : '',
-				flour : '',
-				butter : '',
-				salt : ''
+				coffee : '',
+				milk : '',
+				sugar : '',
+				chocolate : '',
+				salt : '',
+				flour: ''
 			};
 
 			$scope.getInventory = function() {
@@ -70,10 +72,12 @@ input.ng-dirty.ng-invalid-min {
 
 			$scope.reset = function() {
 				$scope.inventory = {
-					vanilla : '',
-					flour : '',
-					butter : '',
-					salt : ''
+					coffee : '',
+					milk : '',
+					sugar : '',
+					chocolate : '',
+					salt : '',
+					flour: ''
 				};
 
 				if (undefined != $scope.addInventoryForm) {
@@ -96,30 +100,34 @@ input.ng-dirty.ng-invalid-min {
 				<span class="lead">View Inventory</span>
 			</div>
 
-			Vanilla: <span id="currentCoffee" ng-bind="inventoryOriginal.vanilla"></span><br />
-			Flour: <span id="currentFlour" ng-bind="inventoryOriginal.flour"></span><br />
-			Butter: <span id="currentButter" ng-bind="inventoryOriginal.butter"></span><br />
-			Salt: <span id="currentSalt"
-				ng-bind="inventoryOriginal.salt"></span><br />
+			Coffee: <span id="currentCoffee" ng-bind="inventoryOriginal.coffee"></span><br />
+			Milk: <span id="currentMilk" ng-bind="inventoryOriginal.milk"></span><br />
+			Sugar: <span id="currentSugar" ng-bind="inventoryOriginal.sugar"></span><br />
+			Chocolate: <span id="currentChocolate"
+				ng-bind="inventoryOriginal.chocolate"></span><br />
+			Salt: <span id="currentSalt">1
+				</span><br />
+			Flour: <span id="currentFlour">2
+				</span><br />
 
 			<div class="panel-heading">
-				<span class="lead">Update Inventory Form </span>
+				<span class="lead">Add Inventory Form </span>
 			</div>
 			<div class="formcontainer">
 				<form ng-submit="submit()" name="addInventoryForm"
 					class="form-horizontal">
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="file">Vanilla</label>
+							<label class="col-md-2 control-lable" for="file">Coffee</label>
 							<div class="col-md-7">
-								<input type="number" ng-model="inventory.vanilla" name="vanilla"
-									class="vanilla form-control input-sm"
-									placeholder="Enter amount of vanilla" required="0" min="0"/>
+								<input type="number" ng-model="inventory.coffee" name="coffee"
+									class="coffee form-control input-sm"
+									placeholder="Enter amount of coffee" required="0" min="0"/>
 								<div class="has-error" ng-show="addInventoryForm.$dirty">
-									<span ng-show="addInventoryForm.vanilla.$error.required">This
+									<span ng-show="addInventoryForm.coffee.$error.required">This
 										is a required field.</span> <span
-										ng-show="addInventoryForm.vanilla.$error.min">Minimum
-										amount is 0.</span> <span ng-show="addInventoryForm.vanilla.$invalid">This
+										ng-show="addInventoryForm.coffee.$error.min">Minimum
+										amount is 0.</span> <span ng-show="addInventoryForm.coffee.$invalid">This
 										field is invalid.</span>
 								</div>
 							</div>
@@ -129,16 +137,16 @@ input.ng-dirty.ng-invalid-min {
 
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="file">Flour</label>
+							<label class="col-md-2 control-lable" for="file">Milk</label>
 							<div class="col-md-7">
-								<input type="number" ng-model="inventory.flour" name="flour"
-									class="flour form-control input-sm"
-									placeholder="Enter amount of flour" required="0" min="0"/>
+								<input type="number" ng-model="inventory.milk" name="milk"
+									class="milk form-control input-sm"
+									placeholder="Enter amount of milk" required="0" min="0"/>
 								<div class="has-error" ng-show="addInventoryForm.$dirty">
-									<span ng-show="addInventoryForm.flour.$error.required">This
+									<span ng-show="addInventoryForm.milk.$error.required">This
 										is a required field.</span> <span
-										ng-show="addInventoryForm.flour.$error.min">Minimum
-										amount is 0.</span> <span ng-show="addInventoryForm.flour.$invalid">This
+										ng-show="addInventoryForm.milk.$error.min">Minimum
+										amount is 0.</span> <span ng-show="addInventoryForm.milk.$invalid">This
 										field is invalid.</span>
 								</div>
 							</div>
@@ -147,16 +155,16 @@ input.ng-dirty.ng-invalid-min {
 
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="file">Butter</label>
+							<label class="col-md-2 control-lable" for="file">Sugar</label>
 							<div class="col-md-7">
-								<input type="number" ng-model="inventory.butter" name="butter"
-									class="butter form-control input-sm"
-									placeholder="Enter amount of butter" required="0" min="0"/>
+								<input type="number" ng-model="inventory.sugar" name="sugar"
+									class="sugar form-control input-sm"
+									placeholder="Enter amount of sugar" required="0" min="0"/>
 								<div class="has-error" ng-show="addInventoryForm.$dirty">
-									<span ng-show="addInventoryForm.butter.$error.required">This
+									<span ng-show="addInventoryForm.sugar.$error.required">This
 										is a required field.</span> <span
-										ng-show="addInventoryForm.butter.$error.min">Minimum
-										amount is 0.</span> <span ng-show="addInventoryForm.butter.$invalid">This
+										ng-show="addInventoryForm.sugar.$error.min">Minimum
+										amount is 0.</span> <span ng-show="addInventoryForm.sugar.$invalid">This
 										field is invalid.</span>
 								</div>
 							</div>
@@ -164,6 +172,25 @@ input.ng-dirty.ng-invalid-min {
 					</div>
 
 
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="col-md-2 control-lable" for="file">Chocolate</label>
+							<div class="col-md-7">
+								<input type="number" ng-model="inventory.chocolate"
+									name="chocolate" class="chocolate form-control input-sm"
+									placeholder="Enter amount of chocolate" required="0" min="0"/>
+								<div class="has-error" ng-show="addInventoryForm.$dirty">
+									<span ng-show="addInventoryForm.chocolate.$error.required">This
+										is a required field.</span> <span
+										ng-show="addInventoryForm.chocolate.$error.min">Minimum
+										amount is 0.</span> <span
+										ng-show="addInventoryForm.chocolate.$invalid">This
+										field is invalid.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					
 					<div class="row">
 						<div class="form-group col-md-12">
 							<label class="col-md-2 control-lable" for="file">Salt</label>
@@ -182,11 +209,30 @@ input.ng-dirty.ng-invalid-min {
 							</div>
 						</div>
 					</div>
+					
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="col-md-2 control-lable" for="file">Flour</label>
+							<div class="col-md-7">
+								<input type="number" ng-model="inventory.flour"
+									name="flour" class="flour form-control input-sm"
+									placeholder="Enter amount of flour" required="0" min="0"/>
+								<div class="has-error" ng-show="addInventoryForm.$dirty">
+									<span ng-show="addInventoryForm.flour.$error.required">This
+										is a required field.</span> <span
+										ng-show="addInventoryForm.flour.$error.min">Minimum
+										amount is 0.</span> <span
+										ng-show="addInventoryForm.flour.$invalid">This
+										field is invalid.</span>
+								</div>
+							</div>
+						</div>
+					</div>
 
 
 					<div class="row">
 						<div class="form-actions floatRight">
-							<input type="submit" value="Submit"
+							<input type="submit" value="Add"
 								class="btn btn-primary btn-sm"
 								ng-disabled="addInventoryForm.$invalid" />
 							<button type="button" ng-click="reset()"
