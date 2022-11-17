@@ -41,6 +41,19 @@ public class MappingController {
     }
 
     /**
+     * On a GET request to /customrecipe, the RecipeController will return
+     * /src/main/resources/templates/customrecipe.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping({"/customrecipe", "/customrecipe.html"})
+    public String addCustomRecipePage(final Model model) {
+        return "customrecipe";
+    }
+
+    /**
      * On a GET request to /deleterecipe, the DeleteRecipeController will return
      * /src/main/resources/templates/deleterecipe.html.
      *
@@ -64,6 +77,19 @@ public class MappingController {
     @GetMapping ( { "/editrecipe", "/editrecipe.html" } )
     public String editRecipeForm ( final Model model ) {
         return "editrecipe";
+    }
+    
+    /**
+     * On a GET request to /addingredient, the IngredientController will return
+     * /src/main/resources/templates/addingredient.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/ingredient", "/addingredient.html" } )
+    public String addIngredientPage ( final Model model ) {
+        return "addingredient";
     }
 
     /**
