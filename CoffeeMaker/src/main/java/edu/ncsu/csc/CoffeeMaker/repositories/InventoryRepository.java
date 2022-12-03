@@ -1,8 +1,7 @@
 package edu.ncsu.csc.CoffeeMaker.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import edu.ncsu.csc.CoffeeMaker.models.Inventory;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * InventoryRepository is used to provide CRUD operations for the Inventory

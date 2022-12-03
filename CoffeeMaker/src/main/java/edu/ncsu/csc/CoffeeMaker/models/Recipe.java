@@ -1,9 +1,16 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Recipe for the coffee maker. Recipe is tied to the database using Hibernate
@@ -15,48 +22,73 @@ import javax.validation.constraints.Min;
 @Entity
 public class Recipe extends DomainObject {
 
-    /** Recipe id */
+    /**
+     * Recipe id
+     */
     @Id
     @GeneratedValue
-    private Long    id;
+    private Long id;
 
-    /** Recipe name */
-    private String  name;
+    /**
+     * Recipe name
+     */
+    private String name;
 
-    /** Recipe price */
-    @Min ( 0 )
+    /**
+     * Recipe price
+     */
+    @Min(0)
     private Integer price;
 
-    /** Amount coffee */
-    @Min ( 0 )
-    private Integer coffee;
-
-    /** Amount milk */
-    @Min ( 0 )
-    private Integer milk;
-
-    /** Amount sugar */
-    @Min ( 0 )
-    private Integer sugar;
-
-    /** Amount chocolate */
-    @Min ( 0 )
-    private Integer chocolate;
+    /**
+     * Map of Recipe Ingredients to amounts
+     */
+    @ElementCollection
+    @JoinColumn(name = "ingredient_name")
+    private Map<Ingredient, @Min(0) Integer> ingredients;
 
     /**
      * Creates a default recipe for the coffee maker.
      */
-    public Recipe () {
+    public Recipe() {
         this.name = "";
+        this.ingredients = new HashMap<>();
     }
 
     /**
-     * Check if all ingredient fields in the recipe are 0
-     *
-     * @return true if all ingredient fields are 0, otherwise return false
+     * Adds a single Ingredient to the Recipe
+     * @param ingredient to be added
+     * @param amount amount to be added
      */
-    public boolean checkRecipe () {
-        return coffee == 0 && milk == 0 && sugar == 0 && chocolate == 0;
+    public void addIngredient(Ingredient ingredient, Integer amount) {
+        this.ingredients.put(ingredient, amount);
+    }
+
+    /**
+     * Sets the ingredient map to an entirely new map.
+     * @param ingredients the map to replace the ingredients with
+     */
+    public void setIngredients(Map<Ingredient, Integer> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    /**
+     * Gets all Ingredients in the Recipe
+     * @return map of Ingredients in the Recipe
+     */
+    public Map<Ingredient, Integer> getIngredients() {
+        return this.ingredients;
+    }
+
+    /**
+     * Gets an Ingredient in the Recipe
+     * @param ingredientType the type of the Ingredient desired
+     * @return desired Ingredient in the Recipe, or null if it's not in the recipe
+     */
+    public Map.Entry<Ingredient, Integer> getIngredient(String ingredientType) {
+
+        return this.ingredients.entrySet().stream().filter(
+                (ingredient) -> ingredient.getKey().getName().equals(ingredientType)).findAny().orElse(null);
     }
 
     /**
@@ -65,95 +97,18 @@ public class Recipe extends DomainObject {
      * @return the ID
      */
     @Override
-    public Long getId () {
+    public Long getId() {
         return id;
     }
 
     /**
      * Set the ID of the Recipe (Used by Hibernate)
      *
-     * @param id
-     *            the ID
+     * @param id the ID
      */
-    @SuppressWarnings ( "unused" )
-    private void setId ( final Long id ) {
+    @SuppressWarnings("unused")
+    private void setId(final Long id) {
         this.id = id;
-    }
-
-    /**
-     * Returns amount of chocolate in the recipe.
-     *
-     * @return Returns the amtChocolate.
-     */
-    public Integer getChocolate () {
-        return chocolate;
-    }
-
-    /**
-     * Sets the amount of chocolate in the recipe.
-     *
-     * @param chocolate
-     *            The amtChocolate to set.
-     */
-    public void setChocolate ( final Integer chocolate ) {
-        this.chocolate = chocolate;
-    }
-
-    /**
-     * Returns amount of coffee in the recipe.
-     *
-     * @return Returns the amtCoffee.
-     */
-    public Integer getCoffee () {
-        return coffee;
-    }
-
-    /**
-     * Sets the amount of coffee in the recipe.
-     *
-     * @param coffee
-     *            The amtCoffee to set.
-     */
-    public void setCoffee ( final Integer coffee ) {
-        this.coffee = coffee;
-    }
-
-    /**
-     * Returns amount of milk in the recipe.
-     *
-     * @return Returns the amtMilk.
-     */
-    public Integer getMilk () {
-        return milk;
-    }
-
-    /**
-     * Sets the amount of milk in the recipe.
-     *
-     * @param milk
-     *            The amtMilk to set.
-     */
-    public void setMilk ( final Integer milk ) {
-        this.milk = milk;
-    }
-
-    /**
-     * Returns amount of sugar in the recipe.
-     *
-     * @return Returns the amtSugar.
-     */
-    public Integer getSugar () {
-        return sugar;
-    }
-
-    /**
-     * Sets the amount of sugar in the recipe.
-     *
-     * @param sugar
-     *            The amtSugar to set.
-     */
-    public void setSugar ( final Integer sugar ) {
-        this.sugar = sugar;
     }
 
     /**
@@ -161,17 +116,16 @@ public class Recipe extends DomainObject {
      *
      * @return Returns the name.
      */
-    public String getName () {
+    public String getName() {
         return name;
     }
 
     /**
      * Sets the recipe name.
      *
-     * @param name
-     *            The name to set.
+     * @param name The name to set.
      */
-    public void setName ( final String name ) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -180,32 +134,33 @@ public class Recipe extends DomainObject {
      *
      * @return Returns the price.
      */
-    public Integer getPrice () {
+    public Integer getPrice() {
         return price;
     }
 
     /**
      * Sets the recipe price.
      *
-     * @param price
-     *            The price to set.
+     * @param price The price to set.
      */
-    public void setPrice ( final Integer price ) {
+    public void setPrice(final Integer price) {
         this.price = price;
     }
 
     /**
      * Updates the fields to be equal to the passed Recipe
      *
-     * @param r
-     *            with updated fields
+     * @param r with updated fields
      */
-    public void updateRecipe ( final Recipe r ) {
-        setChocolate( r.getChocolate() );
-        setCoffee( r.getCoffee() );
-        setMilk( r.getMilk() );
-        setSugar( r.getSugar() );
-        setPrice( r.getPrice() );
+    public void updateRecipe(final Recipe r) {
+        setPrice(r.getPrice());
+        Map<Ingredient, Integer> ingredientIntegerMap = new HashMap<>();
+
+        for (Map.Entry<Ingredient, Integer> i : r.getIngredients().entrySet()) {
+            ingredientIntegerMap.put(new Ingredient(i.getKey().getName()), i.getValue());
+        }
+
+        setIngredients(ingredientIntegerMap);
     }
 
     /**
@@ -214,36 +169,48 @@ public class Recipe extends DomainObject {
      * @return String
      */
     @Override
-    public String toString () {
-        return name;
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(this.name).append(", Ingredients: {\n");
+
+        List<Ingredient> ingredientList = new ArrayList<>(this.ingredients.keySet());
+        Collections.sort(ingredientList);
+
+        for (Ingredient ingredient : ingredientList) {
+            builder.append(ingredient.getName()).append(": ").append(this.ingredients.get(ingredient)).append("\n");
+        }
+
+        builder.append("}");
+
+        return builder.toString();
     }
 
     @Override
-    public int hashCode () {
+    public int hashCode() {
         final int prime = 31;
         Integer result = 1;
-        result = prime * result + ( ( name == null ) ? 0 : name.hashCode() );
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
 
     @Override
-    public boolean equals ( final Object obj ) {
-        if ( this == obj ) {
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
         }
-        if ( obj == null ) {
+        if (obj == null) {
             return false;
         }
-        if ( getClass() != obj.getClass() ) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final Recipe other = (Recipe) obj;
-        if ( name == null ) {
-            if ( other.name != null ) {
+        if (name == null) {
+            if (other.name != null) {
                 return false;
             }
-        }
-        else if ( !name.equals( other.name ) ) {
+        } else if (!name.equals(other.name)) {
             return false;
         }
         return true;

@@ -1,8 +1,7 @@
 package edu.ncsu.csc.CoffeeMaker.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import edu.ncsu.csc.CoffeeMaker.models.Recipe;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * RecipeRepository is used to provide CRUD operations for the Recipe model.
