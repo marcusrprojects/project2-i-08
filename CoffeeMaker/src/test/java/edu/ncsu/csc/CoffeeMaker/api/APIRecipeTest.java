@@ -1,7 +1,14 @@
 package edu.ncsu.csc.CoffeeMaker.api;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -46,6 +53,102 @@ public class APIRecipeTest {
 
         mvc.perform(post("/api/v1/recipes").contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtils.asJsonString(r))).andExpect(status().isOk());
+
+    }
+    
+    @Test
+    @Transactional
+    public void editRecipe() throws Exception {
+        service.deleteAll();
+
+        final Recipe r = new Recipe();
+        r.setName("Mocha");
+        r.addIngredient(new Ingredient("Chocolate"), 10);
+        r.addIngredient(new Ingredient("Milk"), 20);
+        r.addIngredient(new Ingredient("Sugar"), 5);
+        r.addIngredient(new Ingredient("Coffee"), 1);
+
+        r.setPrice(5);
+
+        
+        final Recipe r2 = new Recipe();
+        r2.addIngredient(new Ingredient("Coffee"), 2);
+        r2.addIngredient(new Ingredient("Milk"), 2);
+        r2.addIngredient(new Ingredient("Sugar"), 2);
+        r2.setPrice(8);
+        r2.setName("Latte");
+        
+        mvc.perform(post("/api/v1/recipes").contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJsonString(r))).andExpect(status().isOk());
+        
+        mvc.perform(post("/api/v1/recipe").contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJsonString(r2)));
+        
+        r.setPrice(15);
+        
+        mvc.perform(put("/api/v1/editrecipe/Mocha").contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtils.asJsonString(r))).andExpect(status().isOk());
+        
+        r.setPrice(-1);
+        
+        mvc.perform(put("/api/v1/editrecipe/Mocha").contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtils.asJsonString(r))).andExpect(status().isConflict());
+        
+        r.setPrice(15);
+        
+        Map<Ingredient, Integer> map = new HashMap<>();
+        
+        r.setIngredients(map);
+        
+        mvc.perform(put("/api/v1/editrecipe/Mocha").contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtils.asJsonString(r))).andExpect(status().isConflict());
+        
+        r.addIngredient(new Ingredient("Coffee"), 2);
+        r.addIngredient(new Ingredient("Milk"), 2);
+        r.addIngredient(new Ingredient("Sugar"), 2);
+        
+        mvc.perform(put("/api/v1/editrecipe/null").contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtils.asJsonString(r))).andExpect(status().isNotFound());
+        
+        
+//        mvc.perform(get("/api/v1/editrecipe/Mocha").contentType(MediaType.APPLICATION_JSON))
+//		.andExpect(status().isOk());
+        
+        
+        
+        List<Recipe> recList = new ArrayList<>();
+        recList.add(r);
+        recList.add(r2);
+        
+        mvc.perform(get("/api/v1/editrecipe").contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJsonString(recList))).andExpect(status().isOk());
+        
+        mvc.perform(put("/api/v1/editrecipe/Mocha").contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtils.asJsonString(r))).andExpect(status().isOk());
+        
+        mvc.perform(get("/api/v1/editrecipe/Mocha").contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJsonString(r))).andExpect(status().isOk());
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        Assertions.assertEquals(0, service.findAll().size(), "There should be no Recipes in the CoffeeMaker");
+//
+//
+//        Assertions.assertEquals(3, service.count(),
+//                "Creating three recipes should result in three recipes in the database");
+//
+//        final Recipe r4 = createRecipe("Hot Chocolate", 75, 0, 2, 1, 2);
+//
+//        mvc.perform(post("/api/v1/recipes").contentType(MediaType.APPLICATION_JSON)
+//                .content(TestUtils.asJsonString(r4))).andExpect(status().isInsufficientStorage());
+//
+//        Assertions.assertEquals(3, service.count(), "Creating a fourth recipe should not get saved");
 
     }
 

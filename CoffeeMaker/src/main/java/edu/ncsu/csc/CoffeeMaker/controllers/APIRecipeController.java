@@ -1,5 +1,6 @@
 package edu.ncsu.csc.CoffeeMaker.controllers;
 
+import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
 import edu.ncsu.csc.CoffeeMaker.models.Recipe;
 import edu.ncsu.csc.CoffeeMaker.services.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is the controller that holds the REST endpoints that handle CRUD
@@ -105,4 +108,64 @@ public class APIRecipeController extends APIController {
 
 		return new ResponseEntity(successResponse(name + " was deleted successfully"), HttpStatus.OK);
 	}
+	
+	/**
+	 * REST API method to provide GET access to all recipes in the system
+	 *
+	 * @return JSON representation of all recipies
+	 */
+	@GetMapping(BASE_PATH + "/editrecipe")
+	public List<Recipe> getRecipesInEdit() {
+		return service.findAll();
+	}
+	
+	/**
+	 * REST API method to provide GET access to a specific recipe, as indicated by
+	 * the path variable provided (the name of the recipe desired)
+	 *
+	 * @param name recipe name
+	 * @return response to the request
+	 */
+	@GetMapping(BASE_PATH + "/editrecipe/{name}")
+	public ResponseEntity getRecipeInEdit(@PathVariable final String name) {
+		final Recipe recipe = service.findByName(name);
+		
+		return null == recipe
+				? new ResponseEntity(errorResponse("No recipe found with name " + name), HttpStatus.NOT_FOUND)
+				: new ResponseEntity(recipe, HttpStatus.OK);
+	}
+	
+	/**
+	 * REST API method to provide PUT access to a specific recipe, as indicated by
+	 * the path variable provided (the name of the recipe desired)
+	 *
+	 * @param name recipe name
+	 * @return response to the request
+	 */
+	@PutMapping(BASE_PATH + "/editrecipe/{name}")
+	public ResponseEntity updateRecipeInEdit(@PathVariable final String name, @RequestBody final Recipe recipe) {	
+		
+		Recipe oldRecipe = service.findByName(name);
+		
+        
+        if (recipe.getPrice() < 0) {
+            return new ResponseEntity(errorResponse("Price invalid."), HttpStatus.CONFLICT);
+        }
+        
+        if (recipe.getIngredients().size() == 0) {
+            return new ResponseEntity(errorResponse("Must be 1+ ingredients."), HttpStatus.CONFLICT);
+        }
+
+
+        if (oldRecipe == null) {
+            return new ResponseEntity(errorResponse("No recipe found with name " + recipe), HttpStatus.NOT_FOUND);
+        }
+
+        oldRecipe.setPrice(recipe.getPrice());
+        oldRecipe.setIngredients(recipe.getIngredients());
+
+        service.save(oldRecipe);
+        return new ResponseEntity(successResponse(oldRecipe + " successfully updated"), HttpStatus.OK);
+	}
+	
 }
