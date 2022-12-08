@@ -17,6 +17,7 @@ import java.util.List;
  * Inventory singleton.
  *
  * @author Kai Presler-Marshall
+ *
  */
 @Component
 @Transactional
@@ -37,7 +38,7 @@ public class InventoryService extends Service<Inventory, Long> {
     private IngredientRepository ingredientRepository;
 
     @Override
-    protected JpaRepository<Inventory, Long> getRepository() {
+    protected JpaRepository<Inventory, Long> getRepository () {
         return inventoryRepository;
     }
 
@@ -47,9 +48,9 @@ public class InventoryService extends Service<Inventory, Long> {
      *
      * @return the Inventory, either new or fetched
      */
-    public synchronized Inventory getInventory() {
+    public synchronized Inventory getInventory () {
         final List<Inventory> inventoryList = findAll();
-        if (inventoryList != null && inventoryList.size() == 1) {
+        if (inventoryList != null && inventoryList.size() >= 1) {
             return inventoryList.get(0);
         } else {
             // initialize the inventory with 0 of everything
