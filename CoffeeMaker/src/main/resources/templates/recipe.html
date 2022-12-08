@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Add a Recipe</title>
+<title>Add a Custom Recipe</title>
 <style>
 input.ng-valid {
 	background-color: lightgreen;
@@ -15,6 +15,9 @@ input.ng-dirty.ng-invalid-min {
 	background-color: yellow;
 }
 
+#ingredient-list-element {
+	padding: 20px 15px;
+}
 
 </style>
 <link rel="stylesheet" href="css/bootstrap.css" />
@@ -30,15 +33,23 @@ input.ng-dirty.ng-invalid-min {
 		app.controller('addRecipeCtrl', function($scope, $http, $q) {
 			console.log("Hit!");
 
+			$scope.recipe = {
+					name : '',
+					price : '',
+					ingredients : {
+					}
+			};
+
 			$scope.reset = function() {
 				$scope.recipe = {
 					name : '',
 					price : '',
-					coffee : '',
-					milk : '',
-					sugar : '',
-					chocolate : ''
+					ingredients : {
+					}
 				};
+
+				$scope.populateIngredients();
+
 				if (undefined != $scope.addRecipeForm) {
 					$scope.addRecipeForm.$setPristine(); // reset Form
 				}
@@ -54,6 +65,14 @@ input.ng-dirty.ng-invalid-min {
 				$scope.success = false;
 				$scope.failure = false;
 
+				ingredientKeys = Object.keys($scope.recipe.ingredients)
+
+				for (let i = 0; i < ingredientKeys.length; i++) {
+					if ($scope.recipe.ingredients[ingredientKeys[i]] === 0) {
+						delete $scope.recipe.ingredients[ingredientKeys[i]]
+					}
+				}
+
 				$http.post("/api/v1/recipes", $scope.recipe).then(
 						function(success) {
 							$scope.success = true;
@@ -63,6 +82,29 @@ input.ng-dirty.ng-invalid-min {
 						});
 			}
 
+			$scope.selectOptions = [];
+
+			$scope.getIngredients = function() {
+				$http.get("/api/v1/ingredients?unique=true").then(function(response) {
+					$scope.selectOptions = response.data;
+					$scope.populateIngredients();
+				}, function(rejection) {
+					console.error("Error while getting Ingredients");
+				})
+			}
+
+			$scope.populateIngredients = function() {
+				for (let i = 0; i < $scope.selectOptions.length; i++) {
+					$scope.recipe.ingredients[$scope.selectOptions[i].name] = ""
+				}
+			}
+
+			$scope.changeValue = function() {
+				console.log($scope)
+			}
+
+  			$scope.getIngredients();
+
 			$scope.reset();
 
 		});
@@ -71,11 +113,11 @@ input.ng-dirty.ng-invalid-min {
 
 
 
-	<div ng-app="myApp" class="generic-container ng-cloak"
+	<div ng-app="myApp" class="generic-container"
 		ng-controller="addRecipeCtrl as ctrl">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<span class="lead">Add a Recipe</span>
+				<span class="lead">Add a Custom Recipe</span>
 			</div>
 
 			<div class="formcontainer">
@@ -108,46 +150,9 @@ input.ng-dirty.ng-invalid-min {
 									placeholder="Enter recipe price" required="0" min="0"/>
 								<div class="has-error" ng-show="addRecipeForm.$dirty">
 									<span ng-show="addRecipeForm.price.$error.required">This
-										is a required field</span> <span
+										is a required field.</span> <span
 										ng-show="addRecipeForm.price.$error.min">Minimum amount
-										is 0</span> <span ng-show="addRecipeForm.price.$invalid">This
-										field is invalid </span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="file">Coffee</label>
-							<div class="col-md-7">
-								<input type="number" ng-model="recipe.coffee" name="coffee"
-									class="coffee form-control input-sm"
-									placeholder="Enter amount of coffee" required="0" min="0"/>
-								<div class="has-error" ng-show="addRecipeForm.$dirty">
-									<span ng-show="addRecipeForm.coffee.$error.required">This
-										is a required field.</span> <span
-										ng-show="addRecipeForm.coffee.$error.min">Minimum
-										amount is 0.</span> <span ng-show="addRecipeForm.coffee.$invalid">This
-										field is invalid.</span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-
-					<div class="row">
-						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="file">Milk</label>
-							<div class="col-md-7">
-								<input type="number" ng-model="recipe.milk" name="milk"
-									class="milk form-control input-sm"
-									placeholder="Enter amount of milk" required="0" min="0"/>
-								<div class="has-error" ng-show="addRecipeForm.$dirty">
-									<span ng-show="addRecipeForm.milk.$error.required">This
-										is a required field.</span> <span
-										ng-show="addRecipeForm.milk.$error.min">Minimum amount
-										is 0.</span> <span ng-show="addRecipeForm.milk.$invalid">This
+										is 0.</span> <span ng-show="addRecipeForm.price.$invalid">This
 										field is invalid.</span>
 								</div>
 							</div>
@@ -155,42 +160,33 @@ input.ng-dirty.ng-invalid-min {
 					</div>
 
 					<div class="row">
-						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="file">Sugar</label>
-							<div class="col-md-7">
-								<input type="number" ng-model="recipe.sugar" name="sugar"
-									class="sugar form-control input-sm"
-									placeholder="Enter amount of sugar" required="0" min="0"/>
-								<div class="has-error" ng-show="addRecipeForm.$dirty">
-									<span ng-show="addRecipeForm.sugar.$error.required">This
-										is a required field</span> <span
-										ng-show="addRecipeForm.sugar.$error.min">Minimum amount
-										is 0.</span> <span ng-show="addRecipeForm.sugar.$invalid">This
-										field is invalid.</span>
-								</div>
-							</div>
-						</div>
+						<label class="col-md-12 control-lable" for="file">Ingredients</label>
 					</div>
-
 
 					<div class="row">
 						<div class="form-group col-md-12">
-							<label class="col-md-2 control-lable" for="file">Chocolate</label>
-							<div class="col-md-7">
-								<input type="number" ng-model="recipe.chocolate" name="chocolate"
-									class="chocolate form-control input-sm"
-									placeholder="Enter amount of chocolate" required="0" min="0"/>
-								<div class="has-error" ng-show="addRecipeForm.$dirty">
-									<span ng-show="addRecipeForm.chocolate.$error.required">This
-										is a required field.</span> <span
-										ng-show="addRecipeForm.chocolate.$error.min">Minimum
-										amount is 0.</span> <span ng-show="addRecipeForm.chocolate.$invalid">This
-										field is invalid.</span>
-								</div>
-							</div>
+							<label class="col-md-12 control-lable" for="file">
+								<ul class="list-group">
+									<li class="row list-group-item" id="ingredient-list-element" data-ng-repeat="(ingredient, amount) in recipe.ingredients">
+										<div class="col-md-2">
+											{{ingredient}}
+										</div>
+										<div class="col-md-7">
+											<input class="form-control" type="number" ng-model="recipe.ingredients[ingredient]" name="{{ingredient}}"
+												   placeholder="Enter ingredient amount" required min="0" ng-change="changeValue()"/>
+											<div class="has-error" ng-show="addRecipeForm.$dirty">
+												<span ng-show="addRecipeForm.{{ingredient}}.$error.required">This
+													is a required field.</span> <span
+													ng-show="addRecipeForm.{{ingredient}}.$error.min">Minimum amount
+													is 0.</span> <span ng-show="addRecipeForm.{{ingredient}}.$invalid">This
+													field is invalid.</span>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</label>
 						</div>
 					</div>
-
 
 					<div class="row">
 						<div class="form-actions floatRight">

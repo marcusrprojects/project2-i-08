@@ -46,7 +46,16 @@ input.ng-dirty.ng-invalid-min {
 				$scope.reset();
 			}
 
+			$scope.getInventory = function() {
+				$http.get("/api/v1/inventory").then(function(response) {
+					$scope.inventoryOriginal = response.data;
+				}, function(rejection) {
+					console.error("Error while getting Inventory");
+				})
+			}
+
 			$scope.addIngredient = function() {
+				ingredientCopy = angular.copy($scope.ingredient);
 				$scope.success = false;
 				$scope.failure = false;
 
@@ -55,8 +64,34 @@ input.ng-dirty.ng-invalid-min {
 							$scope.success = true;
 							$scope.failure = false;
 						}, function(rejection) {
+							$scope.failure = true;
+							$scope.success = false;
 							console.error("Error while adding ingredient");
+						}).then(
+						function() {
+							if ($scope.failure) {
+								return;
+							} else {
+
+								inventory = {
+									ingredients: {
+									}
+								}
+
+								inventory.ingredients[ingredientCopy.name] = ingredientCopy.unit;
+
+								$http.put("/api/v1/inventory", inventory).then(
+										function(response) {
+											$scope.getInventory();
+										}, function(rejection) {
+											$scope.failure = true;
+											$scope.success = false;
+											console.error("Error while updating Inventory!");
+										});
+							}
 						});
+
+				$scope.success = !($scope.failure);
 			}
 
 			$scope.reset();
