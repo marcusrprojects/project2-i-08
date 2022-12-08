@@ -69,10 +69,7 @@ public class Ingredient extends DomainObject implements Comparable<Ingredient> {
 
     @Override
     public String toString() {
-        return "Ingredient{" +
-                "id=" + id +
-                ", ingredient=" + name +
-                '}';
+        return name;
     }
 
     @Override

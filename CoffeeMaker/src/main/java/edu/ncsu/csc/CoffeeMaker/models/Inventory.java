@@ -1,6 +1,5 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
-
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,9 +22,7 @@ import java.util.Map;
 @Entity
 public class Inventory extends DomainObject {
 
-    /**
-     * id for inventory entry
-     */
+    /** id for inventory entry */
     @Id
     @GeneratedValue
     private Long id;
@@ -61,16 +58,17 @@ public class Inventory extends DomainObject {
      * @return long
      */
     @Override
-    public Long getId() {
+    public Long getId () {
         return id;
     }
 
     /**
      * Set the ID of the Inventory (Used by Hibernate)
      *
-     * @param id the ID
+     * @param id
+     *            the ID
      */
-    public void setId(final Long id) {
+    public void setId ( final Long id ) {
         this.id = id;
     }
 
@@ -141,17 +139,19 @@ public class Inventory extends DomainObject {
         } catch (final NumberFormatException e) {
             throw new IllegalArgumentException("Units of ingredient must be a positive integer");
         }
+
         if (amtIngredient < 0) {
             throw new IllegalArgumentException("Units of ingredient must be a positive integer");
         }
-
         return amtIngredient;
+
     }
 
     /**
      * Returns true if there are enough ingredients to make the beverage.
      *
-     * @param r recipe to check if there are enough ingredients
+     * @param r
+     *            recipe to check if there are enough ingredients
      * @return true if enough ingredients to make the beverage
      */
     public boolean enoughIngredients(final Recipe r) {
@@ -169,7 +169,8 @@ public class Inventory extends DomainObject {
      * Removes the ingredients used to make the specified recipe. Assumes that
      * the user has checked that there are enough ingredients to make
      *
-     * @param r recipe to make
+     * @param r
+     *            recipe to make
      * @return true if recipe is made.
      */
     public boolean useIngredients(final Recipe r) {
@@ -182,9 +183,9 @@ public class Inventory extends DomainObject {
                     return false;
                 }
             }
-
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -216,7 +217,7 @@ public class Inventory extends DomainObject {
      * @return String
      */
     @Override
-    public String toString() {
+    public String toString () {
         final StringBuffer buf = new StringBuffer();
 
         List<Ingredient> ingredientList = new ArrayList<>(this.ingredients.keySet());

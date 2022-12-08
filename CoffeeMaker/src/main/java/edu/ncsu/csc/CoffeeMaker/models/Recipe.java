@@ -22,22 +22,16 @@ import java.util.Map;
 @Entity
 public class Recipe extends DomainObject {
 
-    /**
-     * Recipe id
-     */
+    /** Recipe id */
     @Id
     @GeneratedValue
-    private Long id;
+    private Long    id;
 
-    /**
-     * Recipe name
-     */
-    private String name;
+    /** Recipe name */
+    private String  name;
 
-    /**
-     * Recipe price
-     */
-    @Min(0)
+    /** Recipe price */
+    @Min ( 0 )
     private Integer price;
 
     /**
@@ -50,8 +44,9 @@ public class Recipe extends DomainObject {
     /**
      * Creates a default recipe for the coffee maker.
      */
-    public Recipe() {
+    public Recipe () {
         this.name = "";
+        this.price = 0;
         this.ingredients = new HashMap<>();
     }
 
@@ -97,17 +92,18 @@ public class Recipe extends DomainObject {
      * @return the ID
      */
     @Override
-    public Long getId() {
+    public Long getId () {
         return id;
     }
 
     /**
      * Set the ID of the Recipe (Used by Hibernate)
      *
-     * @param id the ID
+     * @param id
+     *            the ID
      */
-    @SuppressWarnings("unused")
-    private void setId(final Long id) {
+    @SuppressWarnings ( "unused" )
+    private void setId ( final Long id ) {
         this.id = id;
     }
 
@@ -116,16 +112,17 @@ public class Recipe extends DomainObject {
      *
      * @return Returns the name.
      */
-    public String getName() {
+    public String getName () {
         return name;
     }
 
     /**
      * Sets the recipe name.
      *
-     * @param name The name to set.
+     * @param name
+     *            The name to set.
      */
-    public void setName(final String name) {
+    public void setName ( final String name ) {
         this.name = name;
     }
 
@@ -134,23 +131,25 @@ public class Recipe extends DomainObject {
      *
      * @return Returns the price.
      */
-    public Integer getPrice() {
+    public Integer getPrice () {
         return price;
     }
 
     /**
      * Sets the recipe price.
      *
-     * @param price The price to set.
+     * @param price
+     *            The price to set.
      */
-    public void setPrice(final Integer price) {
+    public void setPrice ( final Integer price ) {
         this.price = price;
     }
 
     /**
      * Updates the fields to be equal to the passed Recipe
      *
-     * @param r with updated fields
+     * @param r
+     *            with updated fields
      */
     public void updateRecipe(final Recipe r) {
         setPrice(r.getPrice());
@@ -187,30 +186,31 @@ public class Recipe extends DomainObject {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode () {
         final int prime = 31;
         Integer result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ( ( name == null ) ? 0 : name.hashCode() );
         return result;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals ( final Object obj ) {
+        if ( this == obj ) {
             return true;
         }
-        if (obj == null) {
+        if ( obj == null ) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if ( getClass() != obj.getClass() ) {
             return false;
         }
         final Recipe other = (Recipe) obj;
-        if (name == null) {
-            if (other.name != null) {
+        if ( name == null ) {
+            if ( other.name != null ) {
                 return false;
             }
-        } else if (!name.equals(other.name)) {
+        }
+        else if ( !name.equals( other.name ) ) {
             return false;
         }
         return true;
