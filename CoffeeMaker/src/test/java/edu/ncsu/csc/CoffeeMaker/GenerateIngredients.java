@@ -1,5 +1,6 @@
 package edu.ncsu.csc.CoffeeMaker;
 
+import edu.ncsu.csc.CoffeeMaker.common.TestUtils;
 import edu.ncsu.csc.CoffeeMaker.services.IngredientService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;

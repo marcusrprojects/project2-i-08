@@ -16,11 +16,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -105,7 +104,18 @@ public class APITest {
 		Ingredient ingredient3 = new Ingredient("Chocolate");
 
 		Ingredient ingredient4 = new Ingredient("Oatmeal");
-		
+
+		Ingredient ingredient5 = new Ingredient("Oatmeal");
+
+		Inventory inventory = new Inventory();
+		Map<Ingredient, Integer> ingredients = new HashMap<>();
+		ingredients.put(ingredient1, 50);
+		ingredients.put(ingredient2, 50);
+		ingredients.put(ingredient3, 50);
+		ingredients.put(ingredient4, 50);
+
+		inventory.addIngredients(ingredients);
+
 		mvc.perform(post("/api/v1/ingredients").contentType(MediaType.APPLICATION_JSON)
 				.content(TestUtils.asJsonString(ingredient1))).andExpect(status().isOk());
 		
@@ -129,6 +139,25 @@ public class APITest {
 		
 		mvc.perform(post("/api/v1/ingredients").contentType(MediaType.APPLICATION_JSON)
 				.content(TestUtils.asJsonString(ingredient3))).andExpect(status().isOk());
+
+		Recipe duplicateIngredient = new Recipe();
+		duplicateIngredient.addIngredient(ingredient5, 3);
+
+		mvc.perform(post("/api/v1/recipes").contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtils.asJsonString(duplicateIngredient))).andExpect(status().isOk());
+
+		mvc.perform(put("/api/v1/inventory").contentType(MediaType.APPLICATION_JSON)
+				.content(TestUtils.asJsonString(inventory))).andExpect(status().isOk());
+
+		String content = mvc.perform(get("/api/v1/ingredients?unique=true").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+		Assertions.assertEquals(1, StringUtils.countOccurrencesOf(content, "Oatmeal"), "Duplicate ingredient names should not be included.");
+
+		String contentNonUnique = mvc.perform(get("/api/v1/ingredients").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+		Assertions.assertEquals(3, StringUtils.countOccurrencesOf(contentNonUnique, "Oatmeal"), "Duplicate ingredient names should be included.");
 	}
 
 	@Test
