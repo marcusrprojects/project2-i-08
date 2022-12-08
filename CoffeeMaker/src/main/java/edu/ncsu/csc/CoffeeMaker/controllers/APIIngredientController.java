@@ -2,6 +2,7 @@ package edu.ncsu.csc.CoffeeMaker.controllers;
 
 import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
 import edu.ncsu.csc.CoffeeMaker.services.IngredientService;
+import edu.ncsu.csc.CoffeeMaker.services.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,16 +37,27 @@ public class APIIngredientController extends APIController {
      */
     @Autowired
     private IngredientService ingredientService;
+
+    /**
+     * InventoryService object, to be autowired in by Spring to allow for
+     * manipulating the Inventory model
+     */
+    @Autowired
+    private InventoryService inventoryService;
     
     /**
      * REST API method to provide GET access to all ingredients in the system
      *
+     * @param unique whether or not the returned list should only include unique ingredients by name
      * @return JSON representation of all ingredients
      */
     @GetMapping(BASE_PATH + "ingredients")
-    public List<Ingredient> getIngredients() {
-
-        return ingredientService.findAll();
+    public List<Ingredient> getIngredients(@RequestParam(required = false) boolean unique) {
+        if (unique) {
+            return new ArrayList<>(inventoryService.getInventory().getIngredients().keySet());
+        } else {
+            return ingredientService.findAll();
+        }
     }
 
     /**
@@ -98,6 +112,10 @@ public class APIIngredientController extends APIController {
      */
     @PostMapping(BASE_PATH + "/ingredients")
     public ResponseEntity createIngredient(@RequestBody final Ingredient ingredient) {
+    	if ( null != ingredientService.findByName( ingredient.getName() ) ) {
+            return new ResponseEntity( errorResponse( "Ingredient with the name " + ingredient.getName() + " already exists" ),
+                    HttpStatus.CONFLICT );
+        }
 
         ingredientService.save(ingredient);
         return new ResponseEntity(successResponse(ingredient.toString() + " successfully created"), HttpStatus.OK);

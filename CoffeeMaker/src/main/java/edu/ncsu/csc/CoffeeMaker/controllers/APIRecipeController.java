@@ -1,6 +1,5 @@
 package edu.ncsu.csc.CoffeeMaker.controllers;
 
-import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
 import edu.ncsu.csc.CoffeeMaker.models.Recipe;
 import edu.ncsu.csc.CoffeeMaker.services.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * This is the controller that holds the REST endpoints that handle CRUD
@@ -79,6 +77,12 @@ public class APIRecipeController extends APIController {
 			return new ResponseEntity(errorResponse("Recipe with the name " + recipe.getName() + " already exists"),
 					HttpStatus.CONFLICT);
 		}
+
+		if (recipe.getIngredients().isEmpty()) {
+			return new ResponseEntity(errorResponse("Recipe must have at least one ingredient"),
+					HttpStatus.PRECONDITION_FAILED);
+		}
+
 		if (service.findAll().size() < 3) {
 			service.save(recipe);
 			return new ResponseEntity(successResponse(recipe.getName() + " successfully created"), HttpStatus.OK);
@@ -167,5 +171,4 @@ public class APIRecipeController extends APIController {
         service.save(oldRecipe);
         return new ResponseEntity(successResponse(oldRecipe + " successfully updated"), HttpStatus.OK);
 	}
-	
 }

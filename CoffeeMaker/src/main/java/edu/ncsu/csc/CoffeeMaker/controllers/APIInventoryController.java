@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * This is the controller that holds the REST endpoints that handle add and
  * update operations for the Inventory.
- * <p>
+ *
  * Spring will automatically convert all of the ResponseEntity and List results
  * to JSON
  *
  * @author Kai Presler-Marshall
  * @author Michelle Lemons
+ *
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @RestController
