@@ -49,7 +49,7 @@ input.ng-dirty.ng-invalid-min {
 					};
 				
 				if (undefined != $scope.editRecipeForm) {
-					$scope.editRecipeForm.$setPristine(); // reset Form
+					$scope.editRecipeForm.$setPristine();
 				}
 			}
 
@@ -60,7 +60,6 @@ input.ng-dirty.ng-invalid-min {
 				$scope.reset();
 			}
 
-			//main functionality.
 			$scope.editRecipe = function() {
 				console.log("Hitting!");
 				$scope.success = false;
@@ -70,14 +69,13 @@ input.ng-dirty.ng-invalid-min {
 
 				for (let i = 0; i < ingredientKeys.length; i++) {
 					
-					//do not add ingredients === 0.
 					if ($scope.recipe.ingredients[ingredientKeys[i]] === 0) {
 						delete $scope.recipe.ingredients[ingredientKeys[i]]
 					}
 				}
 
 				console.log("Hitting now!");
-				$http.put("/api/v1/recipe/"+$scope.recipe.name, $scope.recipe).then(
+				$http.put("/api/v1/editrecipe/" + $scope.recipe.name, $scope.recipe).then(
 						function(success) {
 							$scope.success = true;
 						}, function(rejection) {
@@ -120,13 +118,6 @@ input.ng-dirty.ng-invalid-min {
 				}
 			}
   			
-  			/* $scrope.populatePrice = function() {
-  				
-  				if (typeof $scope.recipe.price === 0) {
-  					//$scope.recipe.price = 1
-  				}
-  			} */
-  			
   			$scope.populatePrice = function() {
   				
   				if (typeof $scope.recipe !== "undefined") {
@@ -135,12 +126,6 @@ input.ng-dirty.ng-invalid-min {
   						return true;
   					}
   				}
-  				/* for (let i = 0; i < $scope.selectOptions.length; i++) {
-					if (typeof $scope.recipe !== "undefined" && $scope.recipe.price > 0) {
-						return true;
-					}
-					
-				} */
   			}
 
   			$scope.changeValue = function() {
@@ -170,6 +155,7 @@ input.ng-dirty.ng-invalid-min {
 				<span class="lead">Edit Recipe</span>
 			</div>
 			
+			
 			<form ng-submit="submit()" name="editRecipeForm"
 					class="form-horizontal">
 					
@@ -183,10 +169,7 @@ input.ng-dirty.ng-invalid-min {
        			 	<option value="">Choose</option>
        			 	</select>
        			 	
-       			 	
-       			 	
 				</div>
-			</form>
 
 			<div class="row">
 						<div class="form-group col-md-12" ng-show="populatePrice()">
@@ -246,11 +229,12 @@ input.ng-dirty.ng-invalid-min {
 							ng-disabled="editRecipeForm.$pristine">Reset Form</button>
 				</div>
 			</div>
+			</form>
 			</div>
-			<div ng-show="success">Recipe Created</div>
-			<div ng-show="failure">Error while adding recipe.</div>
+			<div ng-show="success">Recipe Edited</div>
+			<div ng-show="failure">Error while editing recipe.</div>
 		</div>
-
+		
 		<a href="/index">Home</a>
 
 
