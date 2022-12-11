@@ -205,10 +205,10 @@ input.ng-dirty.ng-invalid-min {
 											<input class="form-control" type="number" ng-model="recipe.ingredients[ingredient]" name="{{ingredient}}"
 												   placeholder="Enter ingredient amount" required min="0" ng-change="changeValue()"/>
 											<div class="has-error" ng-show="editRecipeForm.$dirty">
-												<span ng-show="editRecipeForm.{{ingredient}}.$error.required">This
+												<span ng-show="editInventoryForm['{{ingredient}}'].$error.required">This
 													is a required field.</span> <span
-													ng-show="editRecipeForm.{{ingredient}}.$error.min">Minimum amount
-													is 0.</span> <span ng-show="editRecipeForm.{{ingredient}}.$invalid">This
+													ng-show="editInventoryForm['{{ingredient}}'].$error.min">Minimum amount
+													is 0.</span> <span ng-show="editInventoryForm['{{ingredient}}'].$invalid">This
 													field is invalid.</span>
 											</div>
 										</div>
