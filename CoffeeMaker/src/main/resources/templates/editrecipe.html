@@ -75,7 +75,7 @@ input.ng-dirty.ng-invalid-min {
 				}
 
 				console.log("Hitting now!");
-				$http.put("/api/v1/editrecipe/" + $scope.recipe.name, $scope.recipe).then(
+				$http.put("/api/v1/recipes/" + $scope.recipe.name, $scope.recipe).then(
 						function(success) {
 							$scope.success = true;
 						}, function(rejection) {

@@ -130,7 +130,7 @@ public class APIRecipeController extends APIController {
 	 * @param name recipe name
 	 * @return response to the request
 	 */
-	@GetMapping(BASE_PATH + "/recipes/{name}")
+	@GetMapping(BASE_PATH + "/editrecipe/{name}")
 	public ResponseEntity getRecipeInEdit(@PathVariable final String name) {
 		final Recipe recipe = service.findByName(name);
 		
