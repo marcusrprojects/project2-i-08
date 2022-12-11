@@ -75,7 +75,7 @@ input.ng-dirty.ng-invalid-min {
 				}
 
 				console.log("Hitting now!");
-				$http.put("/api/v1/recipes/" + $scope.recipe.name, $scope.recipe).then(
+				$http.put("/api/v1/editrecipe/" + $scope.recipe.name, $scope.recipe).then(
 						function(success) {
 							$scope.success = true;
 						}, function(rejection) {
@@ -193,7 +193,7 @@ input.ng-dirty.ng-invalid-min {
 						<label class="col-md-12 control-lable" for="file">Ingredients</label>
 					</div>
 
-					<div>
+					<div class="row">
 						<div class="form-group col-md-12">
 							<label class="col-md-12 control-lable" for="file">
 								<ul class="list-group">

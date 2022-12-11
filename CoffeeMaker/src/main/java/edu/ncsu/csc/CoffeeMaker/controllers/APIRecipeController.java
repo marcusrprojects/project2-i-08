@@ -146,7 +146,7 @@ public class APIRecipeController extends APIController {
 	 * @param name recipe name
 	 * @return response to the request
 	 */
-	@PutMapping(BASE_PATH + "/recipes/{name}")
+	@PutMapping(BASE_PATH + "/editrecipe/{name}")
 	public ResponseEntity updateRecipeInEdit(@PathVariable final String name, @RequestBody final Recipe recipe) {	
 		
 		Recipe oldRecipe = service.findByName(name);
