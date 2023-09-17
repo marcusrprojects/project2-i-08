@@ -1,5 +1,8 @@
 # Coffee Maker Application
 
+This project was a collaboration between 4 individuals with its work broken into a weekly team portion and a weekly individual portion (separate from the team portion). This repository reflects the weekly individual portion. To see the weekly team portions, please follow this link: [Team Portion of Coffee Maker Project](https://github.com/marcusrprojects/project2-t-03/).
+Note that, necessarily, work from both the team portion is present in the individual repository and vice versa in order to make a functioning application.
+
 ## Table of Contents
 
 - [Introduction](#introduction)
